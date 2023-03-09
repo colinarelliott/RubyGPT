@@ -16,7 +16,7 @@ def gpt(prompt)
     client = OpenAI::Client.new
 
     response = client.create_completions( # wrong method name, needs fixing
-    engine: model,
+    engine: "text-davinci-002",
     prompt: prompt,
     max_tokens: 50,
     temperature: 0.5,
