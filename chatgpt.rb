@@ -15,18 +15,27 @@ def gpt(prompt)
     # Create an API client
     client = OpenAI::Client.new
 
-    response = client.chat(
-        parameters: {
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: @prompt}],
-            temperature: 0.7,
-        }
+    response = client.create_completions( # wrong method name, needs fixing
+    engine: model,
+    prompt: prompt,
+    max_tokens: 50,
+    temperature: 0.5,
+    stop: ['\n', 'User:']
     )
-    puts response.dig("choices", 0, "message", "content")
+
+    # Return the first response
+    response.choices[0].text.strip
 end
 
 puts "Enter your prompt: \n"
 prompt = gets.chomp
-puts "Your prompt is: " + prompt
-puts "Response: \n"
+puts "cgpt: "
 puts gpt(prompt)
+
+# make a loop to keep asking for input
+while true do
+    puts "you: "
+    prompt = gets.chomp
+    puts "cgpt: "
+    puts gpt(prompt)
+end
