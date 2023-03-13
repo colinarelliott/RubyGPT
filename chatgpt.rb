@@ -26,12 +26,13 @@ def gpt(prompt, client)
     })
     return response
 end
+
 # get user input
 puts "Enter your prompt: \n"
 prompt = gets.chomp
 # get gpt response
 puts "cgpt: "
-response = gpt(prompt, client)
+response = gpt(prompt, client) #calls gpt function
 # parse the response
 parsedResponse = JSON.parse(response.body)
 # print the response
@@ -41,6 +42,11 @@ puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ")
 while true do
     puts "you: "
     prompt = gets.chomp
+    if (prompt == "exit" || prompt == "quit" || prompt == "bye" || prompt == "goodbye")
+        puts "cgpt: "
+        puts "Goodbye!"
+        break
+    end
     puts "cgpt: "
     response = gpt(prompt, client)
     parsedResponse = JSON.parse(response.body)
