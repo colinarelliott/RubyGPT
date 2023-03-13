@@ -1,7 +1,9 @@
 # Description: GPT-3 chatbot
 
+# my precious gems
 require "openai"
 require "dotenv"
+require "json"
 
 # Load the .env file
 Dotenv.load(".env")
@@ -11,31 +13,36 @@ OpenAI.configure do |config|
     config.access_token = ENV.fetch('API_KEY')
 end
 
-def gpt(prompt)
-    # Create an API client
-    client = OpenAI::Client.new
+# Create an API client
+client = OpenAI::Client.new
 
-    response = client.create_completions( # wrong method name, needs fixing
-    engine: "text-davinci-002",
-    prompt: prompt,
-    max_tokens: 50,
-    temperature: 0.5,
-    stop: ['\n', 'User:']
-    )
-
-    # Return the first response
-    response.choices[0].text.strip
+#gpt response function
+def gpt(prompt, client)
+    response = client.chat(
+    parameters: {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt}],
+        temperature: 0.7,
+    })
+    return response
 end
-
+# get user input
 puts "Enter your prompt: \n"
 prompt = gets.chomp
+# get gpt response
 puts "cgpt: "
-puts gpt(prompt)
+response = gpt(prompt, client)
+# parse the response
+parsedResponse = JSON.parse(response.body)
+# print the response
+puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ")
 
-# make a loop to keep asking for input
+# make a loop to keep asking for input & repeatedly follow these steps
 while true do
     puts "you: "
     prompt = gets.chomp
     puts "cgpt: "
-    puts gpt(prompt)
+    response = gpt(prompt, client)
+    parsedResponse = JSON.parse(response.body)
+    puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ")
 end
