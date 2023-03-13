@@ -25,6 +25,9 @@ end
 # Create an API client
 client = OpenAI::Client.new
 
+# Create a variable to hold all responses for 'memory'
+$responses = []
+
 #gpt response function
 def gpt(prompt, client)
     response = client.chat(
@@ -33,10 +36,11 @@ def gpt(prompt, client)
         messages: [{ role: "user", content: prompt}],
         temperature: 0.9,
     })
-    return response
+    $responses.push(response)
+    return $responses.last
 end
 
-#intro
+# Introductions are in order
 puts "\n\n\n\n\n\n"
 puts "------------------------------------------".green
 puts "-- Welcome to the ChatGPT Ruby Chat Bot! -".green
