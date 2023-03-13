@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    colorize (0.8.1)
     dotenv (2.8.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
@@ -15,6 +16,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   dotenv
   json
   ruby-openai
