@@ -4,6 +4,7 @@
 require "openai"
 require "dotenv"
 require "json"
+require "colorize"
 
 # Load the .env file
 Dotenv.load(".env")
@@ -27,28 +28,41 @@ def gpt(prompt, client)
     return response
 end
 
+#intro
+puts "------------------------------------------".green
+puts "Welcome to the ChatGPT Ruby Chat Bot!".green
+puts "------------------------------------------".green
+
 # get user input
-puts "Enter your prompt: \n"
+puts "Enter your prompt: ".cyan
 prompt = gets.chomp
 # get gpt response
-puts "cgpt: "
+puts "cgpt: ".red
 response = gpt(prompt, client) #calls gpt function
 # parse the response
 parsedResponse = JSON.parse(response.body)
+# grab the actual content of the response
+stringResponse = parsedResponse["choices"][0]["message"]["content"].tr("\n", " ").sub!(/\A.{2}/m, '')
 # print the response
-puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ")
+puts stringResponse
+
 
 # make a loop to keep asking for input & repeatedly follow these steps
 while true do
-    puts "you: "
+    puts "you: ".cyan
     prompt = gets.chomp
     if (prompt == "exit" || prompt == "quit" || prompt == "bye" || prompt == "goodbye")
         puts "cgpt: "
         puts "Goodbye!"
         break
     end
-    puts "cgpt: "
+    if (prompt == "help" || prompt == "commands" || prompt == "command" || prompt == "howto")
+        puts "Here are the possible commands:\n"
+        puts "exit, quit, goodbye: EXIT THE PROGRAM\n"
+        puts "help, commands, command, howto: SHOW THIS MESSAGE\n"
+    end
+    puts "cgpt: ".red
     response = gpt(prompt, client)
     parsedResponse = JSON.parse(response.body)
-    puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ")
+    puts parsedResponse["choices"][0]["message"]["content"].tr("\n", " ").sub!(/\A.{2}/m, '')
 end
