@@ -1,4 +1,7 @@
-# Description: GPT-3 chatbot
+# Description: GPT-3 chatbot in Ruby
+# Written by @colinarelliott on GitHub
+# Version: 1.0
+# Last updated: 2023-03-13
 
 # my precious gems
 require "openai"
